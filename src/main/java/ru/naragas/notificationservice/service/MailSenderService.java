@@ -13,7 +13,6 @@ import ru.naragas.notificationservice.exception.EmailDeliveryException;
  * @created 8/24/2025
  */
 @Service
-@Primary
 public class MailSenderService implements MailService{
     private final JavaMailSender javaMailSender;
 
