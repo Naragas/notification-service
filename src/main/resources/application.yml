@@ -23,6 +23,7 @@ spring:
     port: 2525
     username: ${MAIL_USERNAME}
     password: ${MAIL_PASSWORD}
+
     properties:
       mail:
         smtp:
@@ -38,3 +39,11 @@ app:
       user-events: user-events
 
 
+mail:
+  from: noreply@naragas.ru
+  subjects:
+    created: Account deleted
+    deleted: Account deleted
+  texts:
+    created: Hello. Your account has been created!
+    deleted: Hello. Your account has been deleted!

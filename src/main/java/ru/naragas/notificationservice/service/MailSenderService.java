@@ -1,5 +1,6 @@
 package ru.naragas.notificationservice.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -16,6 +17,22 @@ import ru.naragas.notificationservice.exception.EmailDeliveryException;
 public class MailSenderService implements MailService{
     private final JavaMailSender javaMailSender;
 
+    @Value("${mail.from}")
+    private String from;
+
+    @Value("${mail.subjects.created}")
+    private String createdSubject;
+
+    @Value("${mail.subjects.deleted}")
+    private String deletedSubject;
+
+    @Value("${mail.texts.created}")
+    private String createdText;
+
+    @Value("${mail.texts.deleted}")
+    private String deletedText;
+
+
     public MailSenderService(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
     }
@@ -23,8 +40,8 @@ public class MailSenderService implements MailService{
     @Override
     public void sendCreatedAccountEmail(String email) {
         SimpleMailMessage createMessage = getBaseMessage(email);
-        createMessage.setSubject("Account created");
-        createMessage.setText("Hello. Your account has been created!");
+        createMessage.setSubject(createdSubject);
+        createMessage.setText(createdText);
         try {
             javaMailSender.send(createMessage);
         } catch (MailException e) {
@@ -37,8 +54,8 @@ public class MailSenderService implements MailService{
     @Override
     public void sendDeletedAccountEmail(String email) {
         SimpleMailMessage deleteMessage = getBaseMessage(email);
-        deleteMessage.setSubject("Account deleted");
-        deleteMessage.setText("Hello. Your account has been deleted!");
+        deleteMessage.setSubject(deletedSubject);
+        deleteMessage.setText(deletedText);
         try {
             javaMailSender.send(deleteMessage);
         } catch (MailException e) {
@@ -48,9 +65,9 @@ public class MailSenderService implements MailService{
         }
     }
 
-    private static SimpleMailMessage getBaseMessage(String email) {
+    private SimpleMailMessage getBaseMessage(String email) {
         SimpleMailMessage baseMessage = new SimpleMailMessage();
-        baseMessage.setFrom("noreply@naragas.ru");
+        baseMessage.setFrom(from);
         baseMessage.setTo(email);
         return baseMessage;
     }
